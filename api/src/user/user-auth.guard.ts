@@ -1,4 +1,4 @@
-import { UserService } from "@/user";
+import { UserService } from "./user.service";
 import {
   CanActivate,
   ExecutionContext,

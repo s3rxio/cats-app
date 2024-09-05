@@ -1,5 +1,5 @@
+import { UserEntity } from "@/user/user.entity";
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import { UserEntity } from "@/user";
 
 export type UserKeys = keyof UserEntity;
 export type MeValue = UserKeys | UserKeys[] | null;
