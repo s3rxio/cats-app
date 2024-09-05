@@ -1,0 +1,8 @@
+@use "./vars.scss";
+
+html,
+body,
+#root {
+  background-color: var(--bg-body);
+  color: var(--text-color--primary);
+}
