@@ -1,0 +1,23 @@
+.header {
+  background-color: var(--bg-header);
+  color: var(--text-color--muted);
+
+  &__container {
+    display: flex;
+    height: 4rem;
+  }
+
+  &__link {
+    color: var(--text-color--muted);
+    text-decoration: none;
+
+    padding: 1.5rem 1.625rem;
+  }
+
+  &__link_active,
+  &__link:hover,
+  &__link:focus {
+    background-color: var(--blue-darker);
+    color: var(--text-color--secondary);
+  }
+}

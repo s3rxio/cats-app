@@ -1,8 +1,36 @@
 @use "./vars.scss";
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 html,
 body,
 #root {
   background-color: var(--bg-body);
   color: var(--text-color--primary);
+
+  height: 100%;
+
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.container {
+  max-width: var(--screen-desktop);
+  width: 100%;
+
+  margin: 0 auto;
+  padding: 0 20px;
+
+  @media (max-width: var(--screen-desktop)) {
+    max-width: var(--screen-laptop);
+    padding: 0 10px;
+  }
+
+  @media (max-width: var(--screen-laptop)) {
+    max-width: var(--screen-tablet);
+  }
+
+  @media (max-width: var(--screen-tablet)) {
+    max-width: var(--screen-mobile);
+  }
 }
