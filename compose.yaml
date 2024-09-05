@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 services:
   proxy:
     container_name: cat-pinterest-proxy
@@ -23,8 +23,19 @@ services:
       context: ./api/
     networks:
       - cat-pinterest-net
+    develop:
+      watch:
+        - path: ./api/src/
+          action: rebuild
     environment:
       NODE_ENV: prod
+      SECRET: s3cr3t
+      SALT_ROUNDS: 10
+      DB_HOST: cat-pinterest-api-pg
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: "1"
+      DB_NAME: support_lk_db
     depends_on:
       cat-pinterest-api-pg:
         condition: service_healthy
@@ -36,6 +47,10 @@ services:
       context: ./front/
     networks:
       - cat-pinterest-net
+    develop:
+      watch:
+        - path: ./front/src
+          action: rebuild
     environment:
       NODE_ENV: prod
 
@@ -48,7 +63,7 @@ services:
       POSTGRES_PASSWORD: 1
       POSTGRES_USER: postgres
       POSTGRES_DB: support_lk_db
-    #      PG_DATA: /var/lib/postgresql/data
+      PGDATA: /var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 2s
