@@ -1,0 +1,18 @@
+.home {
+  display: flex;
+  flex-direction: column;
+
+  gap: 48px;
+  padding: 48px;
+
+  &__res {
+    text-align: center;
+    opacity: 1;
+
+    transition: opacity 0.1s;
+
+    &--hidden {
+      opacity: 0;
+    }
+  }
+}

@@ -1,0 +1,14 @@
+.cats-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+
+  gap: 48px;
+
+  &__item {
+    transition: transform 0.1s;
+  }
+
+  &__item:hover {
+    transform: scale(1.15);
+  }
+}

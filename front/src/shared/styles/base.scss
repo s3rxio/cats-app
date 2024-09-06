@@ -15,22 +15,24 @@ body,
 }
 
 .container {
+  --padding: 20px;
   max-width: var(--screen-desktop);
-  width: 100%;
 
   margin: 0 auto;
-  padding: 0 20px;
+  padding-left: var(--padding);
+  padding-right: var(--padding);
 
-  @media (max-width: var(--screen-desktop)) {
+  @media (max-width: vars.$screen-desktop) {
+    --padding: 10px;
+
     max-width: var(--screen-laptop);
-    padding: 0 10px;
   }
 
-  @media (max-width: var(--screen-laptop)) {
+  @media (max-width: vars.$screen-laptop) {
     max-width: var(--screen-tablet);
   }
 
-  @media (max-width: var(--screen-tablet)) {
+  @media (max-width: vars.$screen-tablet) {
     max-width: var(--screen-mobile);
   }
 }

@@ -1,3 +1,8 @@
+$screen-desktop: 1320px;
+$screen-laptop: 1024px;
+$screen-tablet: 768px;
+$screen-mobile: 520px;
+
 :root {
   /* Colors */
   --white: rgba(255, 255, 255, 1);
@@ -15,12 +20,11 @@
   --text-color--muted: var(--gray);
 
   /* Shadows */
-  --shadow-primary: 0px 6px 8px 2px rgba(0, 0, 0, 0.35);
-  --shadow-header: 0px 4px 4px 0 rgba(0, 0, 0, 0.25);
+  --shadow-header: 0px 4px 4px 0 rgba(0, 0, 0, 25%);
 
   /* Screens */
-  --screen-desktop: 1320px;
-  --screen-laptop: 1024px;
-  --screen-tablet: 768px;
-  --screen-mobile: 320px;
+  --screen-desktop: #{$screen-desktop};
+  --screen-laptop: #{$screen-laptop};
+  --screen-tablet: #{$screen-tablet};
+  --screen-mobile: #{$screen-mobile};
 }

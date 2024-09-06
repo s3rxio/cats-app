@@ -1,6 +1,10 @@
+@use "~/styles/vars";
+
 .header {
   background-color: var(--bg-header);
   color: var(--text-color--muted);
+
+  box-shadow: var(--shadow-header);
 
   &__container {
     display: flex;
@@ -9,9 +13,23 @@
 
   &__link {
     color: var(--text-color--muted);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
     text-decoration: none;
 
     padding: 1.5rem 1.625rem;
+
+    transition-property: background-color, color;
+    transition-duration: 0.1s;
+
+    @media screen and (max-width: vars.$screen-tablet) {
+      width: 100%;
+    }
   }
 
   &__link_active,
