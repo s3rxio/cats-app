@@ -6,6 +6,10 @@
 
   box-shadow: var(--shadow-header);
 
+  position: sticky;
+  top: 0;
+  z-index: var(--z-index-header);
+
   &__container {
     display: flex;
     height: 4rem;

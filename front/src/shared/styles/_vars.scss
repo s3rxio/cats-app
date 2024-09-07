@@ -27,4 +27,9 @@ $screen-mobile: 520px;
   --screen-laptop: #{$screen-laptop};
   --screen-tablet: #{$screen-tablet};
   --screen-mobile: #{$screen-mobile};
+
+  /* Z-index */
+  --z-index-default: 0;
+  --z-index-header: 100;
+  --z-index-modal: 200;
 }
