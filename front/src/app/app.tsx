@@ -1,6 +1,11 @@
 import { RouterProvider } from "react-router-dom";
 import { router } from "../pages";
+import { UserProvider } from "@/entities/user";
 
 export const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider>
+  );
 };

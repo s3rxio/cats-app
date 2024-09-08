@@ -11,6 +11,6 @@ export const catsApi = axios.create({
 export const appApi = axios.create({
   baseURL: appApiConfig.url,
   headers: {
-    authorization: localStorage.getItem("token"),
+    authorization: `Bearer ${localStorage.getItem("token")}`,
   },
 });

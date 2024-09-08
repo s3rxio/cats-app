@@ -1,15 +1,19 @@
 @use "./vars.scss";
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
+* {
+  box-sizing: border-box;
+}
+
 html,
 body,
 #root {
   background-color: var(--bg-body);
   color: var(--text-color--primary);
 
+  font-family: "Roboto", sans-serif;
   height: 100%;
 
-  font-family: "Roboto", sans-serif;
   font-weight: 400;
   font-size: 14px;
 }

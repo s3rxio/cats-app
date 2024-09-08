@@ -1,0 +1,29 @@
+.auth-modal {
+  &__form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+  }
+
+  &__title {
+    text-align: center;
+    align-items: center;
+
+    font-size: 24px;
+    font-weight: 600;
+
+    margin-bottom: 16px;
+  }
+
+  &__error {
+    color: red;
+    opacity: 0;
+
+    transition: opacity 0.2s;
+
+    &--visible {
+      opacity: 1;
+    }
+  }
+}
