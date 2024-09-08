@@ -17,28 +17,15 @@ export const fetchCats = async (params?: GetCatsParams): Promise<Cat[]> => {
     mimeTypes = "jpg",
   } = params || {};
 
-  const res = await catsApi
-    .get<Cat[]>(
-      `/images/search?limit=${limit}&page=${page}&size=${size}&mime_types=${mimeTypes}`
-    )
-    .catch((err) => {
-      console.log(err);
-      return {
-        data: [],
-      };
-    });
+  const res = await catsApi.get<Cat[]>(
+    `/images/search?limit=${limit}&page=${page}&size=${size}&mime_types=${mimeTypes}`
+  );
 
   return res.data;
 };
 
-export const fetchCatImageUrl = async (
-  id: string
-): Promise<string | undefined> => {
-  const res = await catsApi
-    .get<{ url: string }>(`/images/${id}/?size=full`)
-    .catch((err) => {
-      console.log(err);
-    });
+export const fetchCat = async (id: string): Promise<Cat | undefined> => {
+  const res = await catsApi.get<Cat>(`/images/${id}/?size=full`);
 
-  return res?.data?.url;
+  return res.data;
 };

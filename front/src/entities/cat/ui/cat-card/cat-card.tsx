@@ -2,29 +2,44 @@ import { BaseComponent } from "@/shared/types";
 import clsx from "clsx";
 import { catCardStyles } from "./styles";
 import { HeartFilledIcon, HeartIcon } from "@/shared/ui/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface CatCardProps {
+  id: string;
   imageUrl: string;
   isFavorite?: boolean;
+  onLike?: (id: string, setIsFavorite: (prev: boolean) => void) => void;
 }
 
 export const CatCard: BaseComponent<CatCardProps> = ({
+  id,
   imageUrl,
   isFavorite = false,
+  onLike,
   className,
   onClick,
   ...props
 }) => {
   const [catIsFavorite, setCatIsFavorite] = useState(isFavorite);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const changeFavorite = (ev: any) => {
     if (onClick) {
       onClick(ev);
     }
+    if (isDisabled) {
+      return;
+    }
+    setIsDisabled(true);
+    if (onLike) {
+      onLike(id, setCatIsFavorite);
+    } else {
+      setCatIsFavorite(!catIsFavorite);
+    }
 
-    setCatIsFavorite(!catIsFavorite);
+    setIsDisabled(false);
   };
+
   return (
     <div
       className={clsx(
