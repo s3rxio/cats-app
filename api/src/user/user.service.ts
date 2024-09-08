@@ -47,7 +47,13 @@ export class UserService {
     return this.repo.save(user);
   }
 
-  async register(dto: CreateUserDto) {
+  async auth(dto: CreateUserDto) {
+    const isExists = await this.findOneBy({ login: dto.login });
+
+    if (isExists && bcrypt.compareSync(dto.password, isExists.password)) {
+      return isExists;
+    }
+
     const user = await this.create(dto);
 
     return user;

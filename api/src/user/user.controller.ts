@@ -8,8 +8,8 @@ export class UserController {
   constructor(private readonly service: UserService) {}
 
   @Post()
-  async register(@Body() dto: CreateUserDto, @Res() res: Response) {
-    const user = await this.service.register(dto);
+  async auth(@Body() dto: CreateUserDto, @Res() res: Response) {
+    const user = await this.service.auth(dto);
 
     return res
       .set({
