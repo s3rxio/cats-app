@@ -2,43 +2,45 @@ import { BaseComponent } from "@/shared/types";
 import clsx from "clsx";
 import { catCardStyles } from "./styles";
 import { HeartFilledIcon, HeartIcon } from "@/shared/ui/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLikes } from "../../hooks";
 
 export interface CatCardProps {
   id: string;
   imageUrl: string;
   isLiked?: boolean;
-  onLike?: (id: string, setIsLiked: (prev: boolean) => void) => void;
 }
 
 export const CatCard: BaseComponent<CatCardProps> = ({
   id,
   imageUrl,
   isLiked = false,
-  onLike,
   className,
-  onClick,
+  onChange,
   ...props
 }) => {
-  const [catIsLiked, setCatIsLiked] = useState(isLiked);
+  const { likes, like } = useLikes();
+  const [catIsLiked, setCatIsLiked] = useState(isLiked || likes.includes(id));
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const changeLike = (ev: any) => {
-    if (onClick) {
-      onClick(ev);
-    }
-    if (isDisabled) {
-      return;
-    }
+  const handleLike: React.ChangeEventHandler<HTMLInputElement> = async (ev) => {
+    ev.stopPropagation();
     setIsDisabled(true);
-    if (onLike) {
-      onLike(id, setCatIsLiked);
-    } else {
+
+    try {
+      await like(id);
+
       setCatIsLiked(!catIsLiked);
+    } catch (error) {
+      console.log(error);
     }
 
     setIsDisabled(false);
   };
+
+  useEffect(() => {
+    setCatIsLiked(isLiked || likes.includes(id));
+  }, [likes]);
 
   return (
     <div
@@ -47,26 +49,28 @@ export const CatCard: BaseComponent<CatCardProps> = ({
         catIsLiked && catCardStyles.isLiked,
         className
       )}
-      onClick={changeLike}
       {...props}
     >
-      <img src={imageUrl} alt="cat" className={catCardStyles.image} />
+      <div className={catCardStyles.imageBox}>
+        <img src={imageUrl} alt="cat" className={catCardStyles.imageBoxImage} />
+      </div>
       <div className={catCardStyles.like}>
-        <div className={catCardStyles.checkbox}>
-          <HeartIcon className={catCardStyles.checkboxIcon} />
-          <HeartFilledIcon
-            className={clsx(
-              catCardStyles.checkboxIcon,
-              catCardStyles.checkboxIconActive
-            )}
-          />
-          <input
-            type="checkbox"
-            checked={catIsLiked}
-            onChange={changeLike}
-            className={catCardStyles.checkboxInput}
-          />
-        </div>
+        <HeartIcon className={catCardStyles.likeIcon} />
+        <HeartFilledIcon
+          className={clsx(
+            catCardStyles.likeIcon,
+            catCardStyles.likeIconIsActive
+          )}
+        />
+      </div>
+      <div className={catCardStyles.checkbox}>
+        <input
+          type="checkbox"
+          disabled={isDisabled}
+          checked={catIsLiked}
+          onChange={onChange || handleLike}
+          className={catCardStyles.checkboxInput}
+        />
       </div>
     </div>
   );

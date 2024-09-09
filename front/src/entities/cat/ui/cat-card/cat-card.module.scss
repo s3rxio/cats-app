@@ -1,20 +1,22 @@
 .cat-card {
   position: relative;
 
-  width: 100%;
-  aspect-ratio: 1 / 1;
-
   user-select: none;
   cursor: pointer;
 
-  &__image {
-    object-fit: cover;
-
+  &__image-box {
     width: 100%;
     height: 100%;
 
-    user-select: none;
-    pointer-events: none;
+    &__image {
+      object-fit: cover;
+
+      width: 100%;
+      height: 100%;
+
+      user-select: none;
+      pointer-events: none;
+    }
   }
 
   .cat-card__like {
@@ -23,10 +25,6 @@
     right: 0;
 
     padding: 18px;
-  }
-
-  .cat-card__checkbox {
-    position: relative;
 
     &__icon {
       width: 48px;
@@ -47,13 +45,19 @@
       left: 50%;
       transform: translateX(-50%);
     }
+  }
+
+  .cat-card__checkbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 1;
 
     &__input {
-      position: absolute;
-
-      top: 0;
-      left: 0;
-
       width: 100%;
       height: 100%;
 
@@ -65,13 +69,13 @@
   &:hover {
     filter: drop-shadow(0 6px 4px rgba(0, 0, 0, 35%));
 
-    .cat-card__checkbox__icon:not(.cat-card__checkbox__icon--active) {
+    .cat-card__like__icon:not(.cat-card__like__icon--active) {
       opacity: 1;
     }
   }
 
   &--liked:hover {
-    .cat-card__checkbox__icon {
+    .cat-card__like__icon {
       opacity: 1;
     }
   }

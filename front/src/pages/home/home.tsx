@@ -1,16 +1,9 @@
 import { BaseComponent } from "@/shared/types";
-import {
-  CatCardProps,
-  CatsList,
-  dislikeCat,
-  fetchCat,
-  fetchCats,
-  likeCat,
-} from "@/entities/cat";
+import { CatCardProps, CatsList, fetchCat, fetchCats } from "@/entities/cat";
 import { homeStyles } from "./styles";
 import clsx from "clsx";
 import { Cat } from "@/entities/cat";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { AuthModal, fetchLikes, UserContext } from "@/entities/user";
 import { useLocation } from "react-router-dom";
 
@@ -20,7 +13,7 @@ const HomePage: BaseComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [openAuthModal, setOpenAuthModal] = useState(false);
-  const { token, likes, setLikes } = useContext(UserContext);
+  const { token, setLikes } = useContext(UserContext);
   const location = useLocation();
 
   const fetchAndAddCats = async () => {
@@ -60,35 +53,6 @@ const HomePage: BaseComponent = () => {
     setLikes(likes);
 
     return likes;
-  };
-
-  const handleLike = async (
-    id: string,
-    setIsLikes: (prev: boolean) => void
-  ) => {
-    if (!token) {
-      setOpenAuthModal(true);
-      return;
-    }
-
-    const likes = await fetchAndSetLikes();
-    const isExists = likes.includes(id);
-
-    try {
-      if (isExists) {
-        await dislikeCat(id);
-        setLikes(cats.map((cat) => cat.id).filter((catId) => catId !== id));
-        setIsLikes(false);
-
-        return;
-      }
-
-      const res = await likeCat(id);
-      setLikes((prev) => [...prev, res.catId]);
-      setIsLikes(true);
-    } catch {
-      setIsLikes(false);
-    }
   };
 
   const handleScroll = () => {
@@ -132,8 +96,10 @@ const HomePage: BaseComponent = () => {
     fetchAndAddCats();
   }, [isLoading]);
 
-  const resStyles = (state: boolean) =>
-    clsx(homeStyles.res, state && homeStyles.resHidden);
+  const resStyles = useCallback(
+    (state: boolean) => clsx(homeStyles.res, state && homeStyles.resHidden),
+    [isLoading, isError]
+  );
 
   return (
     <div className={clsx("container", homeStyles.root)}>
@@ -145,8 +111,6 @@ const HomePage: BaseComponent = () => {
             ({ id, url: imageUrl }): CatCardProps => ({
               id,
               imageUrl,
-              onLike: handleLike,
-              isLiked: likes.find((catId) => catId === id) !== undefined,
             })
           )}
           noElementsElement={

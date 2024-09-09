@@ -6,6 +6,8 @@
 
   &__item {
     transition: transform 0.1s;
+
+    aspect-ratio: 1 / 1;
   }
 
   &__item:hover {
