@@ -8,9 +8,7 @@ export const Layout: BaseComponent = ({ children, className, ...props }) => {
   return (
     <div className={clsx(layoutStyles.root, className)} {...props}>
       <Header />
-      <main className={layoutStyles.main}>
-        <Outlet />
-      </main>
+      <main className={layoutStyles.main}>{children || <Outlet />}</main>
     </div>
   );
 };

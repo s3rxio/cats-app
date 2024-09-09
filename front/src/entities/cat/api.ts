@@ -2,12 +2,17 @@ import { catsApiConfig } from "@/shared/configs";
 import { appApi, catsApi } from "@/shared/libs/http";
 import { Cat } from "./model";
 
-export type GetCatsParams = {
+export interface GetCatsParam {
   limit?: number;
   page?: number;
   size?: "thumb" | "small" | "med" | "full";
   mimeTypes?: "jpg" | "png" | "gif";
-};
+}
+
+export interface GetCatsParams extends GetCatsParam {
+  limit?: number;
+  page?: number;
+}
 
 export const fetchCats = async (params?: GetCatsParams): Promise<Cat[]> => {
   const {
@@ -24,8 +29,15 @@ export const fetchCats = async (params?: GetCatsParams): Promise<Cat[]> => {
   return res.data;
 };
 
-export const fetchCat = async (id: string): Promise<Cat | undefined> => {
-  const res = await catsApi.get<Cat>(`/images/${id}/?size=full`);
+export const fetchCat = async (
+  id: string,
+  params?: GetCatsParam
+): Promise<Cat | undefined> => {
+  const { size = "small", mimeTypes = "jpg" } = params || {};
+
+  const res = await catsApi.get<Cat>(
+    `/images/${id}?size=${size}&mime_types=${mimeTypes}`
+  );
 
   return res.data;
 };

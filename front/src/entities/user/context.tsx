@@ -6,7 +6,8 @@ import {
   useState,
 } from "react";
 import { USER_TOKEN_KEY } from "./consts";
-import { appApi } from "@/shared/libs/http";
+import { fetchLikes } from "../cat";
+import { AuthModal } from "./ui";
 
 export interface UserContextValue<T = string | null, F = string[]> {
   token: T;
@@ -14,6 +15,9 @@ export interface UserContextValue<T = string | null, F = string[]> {
 
   likes: F;
   setLikes: Dispatch<SetStateAction<F>>;
+
+  authModalIsOpen: boolean;
+  setAuthModalIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export const UserContext = createContext<UserContextValue>(
@@ -25,6 +29,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.getItem(USER_TOKEN_KEY)
   );
   const [likes, setLikes] = useState<UserContextValue["likes"]>([]);
+  const [authModalIsOpen, setAuthModalIsOpen] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -32,8 +37,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    localStorage.setItem(USER_TOKEN_KEY, token || "");
-    appApi.defaults.headers.common["x-auth-token"] = token || "";
+    localStorage.setItem(USER_TOKEN_KEY, token);
+    fetchLikes().then((cats) => setLikes(cats.map(({ catId }) => catId)));
   }, [token]);
 
   return (
@@ -43,8 +48,12 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setToken,
         likes,
         setLikes,
+        authModalIsOpen,
+        setAuthModalIsOpen,
       }}
     >
+      <AuthModal isOpen={authModalIsOpen} setIsOpen={setAuthModalIsOpen} />
+
       {children}
     </UserContext.Provider>
   );

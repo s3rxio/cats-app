@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { UserContext } from "./context";
 
 export const useAuthModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const handleClose = () => setIsOpen(false);
+  const { authModalIsOpen, setAuthModalIsOpen } = useContext(UserContext);
 
-  return { isOpen, setIsOpen, handleClose };
+  const openAuthModal = () => setAuthModalIsOpen(true);
+
+  return { authModalIsOpen, setAuthModalIsOpen, openAuthModal };
 };

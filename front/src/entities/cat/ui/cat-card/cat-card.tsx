@@ -2,8 +2,9 @@ import { BaseComponent } from "@/shared/types";
 import clsx from "clsx";
 import { catCardStyles } from "./styles";
 import { HeartFilledIcon, HeartIcon } from "@/shared/ui/icons";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLikes } from "../../hooks";
+import { useAuthModal, UserContext } from "@/entities/user";
 
 export interface CatCardProps {
   id: string;
@@ -19,12 +20,20 @@ export const CatCard: BaseComponent<CatCardProps> = ({
   onChange,
   ...props
 }) => {
+  const { token } = useContext(UserContext);
+  const { openAuthModal } = useAuthModal();
   const { likes, like } = useLikes();
   const [catIsLiked, setCatIsLiked] = useState(isLiked || likes.includes(id));
   const [isDisabled, setIsDisabled] = useState(false);
 
   const handleLike: React.ChangeEventHandler<HTMLInputElement> = async (ev) => {
     ev.stopPropagation();
+
+    if (!token) {
+      openAuthModal();
+      return;
+    }
+
     setIsDisabled(true);
 
     try {

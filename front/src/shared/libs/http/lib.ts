@@ -10,7 +10,14 @@ export const catsApi = axios.create({
 
 export const appApi = axios.create({
   baseURL: appApiConfig.url,
-  headers: {
-    authorization: `Bearer ${localStorage.getItem("token")}`,
-  },
+});
+
+appApi.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
+  }
+
+  return config;
 });

@@ -13,7 +13,7 @@ export const Header: BaseComponent = ({ className, ...props }) => {
         <NavLink to="/" className={linkClassName}>
           Все котики
         </NavLink>
-        <NavLink to="/favorites" className={linkClassName}>
+        <NavLink to="/likes" className={linkClassName}>
           Любимые котики
         </NavLink>
       </div>

@@ -5,13 +5,21 @@ import { UserContext } from "../../context";
 import clsx from "clsx";
 import { authUser } from "../../api";
 import { AxiosError } from "axios";
+import { BaseComponent } from "@/shared/types";
 
-export const AuthModal = () => {
-  const [isOpen, setIsOpen] = useState(true);
+export interface AuthModalProps {
+  isOpen: boolean;
+  setIsOpen: (prev: boolean) => void;
+}
+
+export const AuthModal: BaseComponent<AuthModalProps> = ({
+  isOpen,
+  setIsOpen,
+}) => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { setToken, setLikes } = useContext(UserContext);
+  const { setToken } = useContext(UserContext);
 
   const handleClose = () => setIsOpen(false);
 
@@ -28,7 +36,6 @@ export const AuthModal = () => {
     authUser({ login, password })
       .then((res) => {
         setToken(res.headers["x-auth-token"]);
-        setLikes(res.data.likes);
         setIsOpen(false);
       })
       .catch((err: AxiosError<any>) => {
