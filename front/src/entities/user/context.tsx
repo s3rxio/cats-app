@@ -12,8 +12,8 @@ export interface UserContextValue<T = string | null, F = string[]> {
   token: T;
   setToken: Dispatch<SetStateAction<T>>;
 
-  favorites: F;
-  setFavorites: Dispatch<SetStateAction<F>>;
+  likes: F;
+  setLikes: Dispatch<SetStateAction<F>>;
 }
 
 export const UserContext = createContext<UserContextValue>(
@@ -24,11 +24,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<UserContextValue["token"]>(
     localStorage.getItem(USER_TOKEN_KEY)
   );
-  const [favorites, setFavorites] = useState<UserContextValue["favorites"]>([]);
+  const [likes, setLikes] = useState<UserContextValue["likes"]>([]);
 
   useEffect(() => {
     if (!token) {
-      setFavorites([]);
+      setLikes([]);
       return;
     }
 
@@ -41,8 +41,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         token,
         setToken,
-        favorites,
-        setFavorites,
+        likes,
+        setLikes,
       }}
     >
       {children}

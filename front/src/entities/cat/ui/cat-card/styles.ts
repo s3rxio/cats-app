@@ -2,13 +2,12 @@ import catCardStylesModule from "./cat-card.module.scss";
 
 const catCardStyles = {
   root: catCardStylesModule["cat-card"],
-  isFavorite: catCardStylesModule["cat-card--favorite"],
+  isLiked: catCardStylesModule["cat-card--liked"],
   image: catCardStylesModule["cat-card__image"],
-  favorite: catCardStylesModule["cat-card__favorite"],
+  like: catCardStylesModule["cat-card__like"],
   checkbox: catCardStylesModule["cat-card__checkbox"],
   checkboxIcon: catCardStylesModule["cat-card__checkbox__icon"],
-  checkboxIconFavorite:
-    catCardStylesModule["cat-card__checkbox__icon--favorite"],
+  checkboxIconActive: catCardStylesModule["cat-card__checkbox__icon--active"],
   checkboxInput: catCardStylesModule["cat-card__checkbox__input"],
 };
 

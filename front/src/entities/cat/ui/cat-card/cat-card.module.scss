@@ -17,7 +17,7 @@
     pointer-events: none;
   }
 
-  .cat-card__favorite {
+  .cat-card__like {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -41,7 +41,7 @@
       transition-duration: 0.1s;
     }
 
-    &__icon--favorite {
+    &__icon--active {
       position: absolute;
 
       left: 50%;
@@ -65,12 +65,12 @@
   &:hover {
     filter: drop-shadow(0 6px 4px rgba(0, 0, 0, 35%));
 
-    .cat-card__checkbox__icon:not(.cat-card__checkbox__icon--favorite) {
+    .cat-card__checkbox__icon:not(.cat-card__checkbox__icon--active) {
       opacity: 1;
     }
   }
 
-  &--favorite:hover {
+  &--liked:hover {
     .cat-card__checkbox__icon {
       opacity: 1;
     }

@@ -1,16 +1,17 @@
 import { BaseComponent } from "@/shared/types";
-import { CatsList, fetchCat, fetchCats } from "@/entities/cat";
+import {
+  CatCardProps,
+  CatsList,
+  dislikeCat,
+  fetchCat,
+  fetchCats,
+  likeCat,
+} from "@/entities/cat";
 import { homeStyles } from "./styles";
 import clsx from "clsx";
 import { Cat } from "@/entities/cat";
 import { useContext, useEffect, useState } from "react";
-import {
-  addLike,
-  AuthModal,
-  fetchLikes,
-  removeLike,
-  UserContext,
-} from "@/entities/user";
+import { AuthModal, fetchLikes, UserContext } from "@/entities/user";
 import { useLocation } from "react-router-dom";
 
 const HomePage: BaseComponent = () => {
@@ -19,7 +20,7 @@ const HomePage: BaseComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [openAuthModal, setOpenAuthModal] = useState(false);
-  const { token, favorites, setFavorites } = useContext(UserContext);
+  const { token, likes, setLikes } = useContext(UserContext);
   const location = useLocation();
 
   const fetchAndAddCats = async () => {
@@ -27,9 +28,9 @@ const HomePage: BaseComponent = () => {
       setIsLoading(true);
 
       if (location.pathname === "/favorites") {
-        const fetchedFavorites = await fetchAndSetFavorites();
+        const fetchedLikes = await fetchAndSetLikes();
 
-        fetchedFavorites.forEach(async (catId) => {
+        fetchedLikes.forEach(async (catId) => {
           await fetchCat(catId).then((cat) => {
             cat && setCats((prev) => [...prev, cat]);
           });
@@ -51,42 +52,42 @@ const HomePage: BaseComponent = () => {
     }
   };
 
-  const fetchAndSetFavorites = async () => {
+  const fetchAndSetLikes = async () => {
     const likes = await fetchLikes().then((res) =>
       res.map(({ catId }) => catId)
     );
 
-    setFavorites(likes);
+    setLikes(likes);
 
     return likes;
   };
 
-  const handleFavorite = async (
+  const handleLike = async (
     id: string,
-    setIsFavorite: (prev: boolean) => void
+    setIsLikes: (prev: boolean) => void
   ) => {
     if (!token) {
       setOpenAuthModal(true);
       return;
     }
 
-    const favorites = await fetchAndSetFavorites();
-    const isExists = favorites.includes(id);
+    const likes = await fetchAndSetLikes();
+    const isExists = likes.includes(id);
 
     try {
       if (isExists) {
-        await removeLike(id);
-        setFavorites(cats.map((cat) => cat.id).filter((catId) => catId !== id));
-        setIsFavorite(false);
+        await dislikeCat(id);
+        setLikes(cats.map((cat) => cat.id).filter((catId) => catId !== id));
+        setIsLikes(false);
 
         return;
       }
 
-      const res = await addLike(id);
-      setFavorites((prev) => [...prev, res.catId]);
-      setIsFavorite(true);
+      const res = await likeCat(id);
+      setLikes((prev) => [...prev, res.catId]);
+      setIsLikes(true);
     } catch {
-      setIsFavorite(false);
+      setIsLikes(false);
     }
   };
 
@@ -140,12 +141,14 @@ const HomePage: BaseComponent = () => {
 
       {!isError && (
         <CatsList
-          cats={cats.map(({ id, url: imageUrl }) => ({
-            id,
-            imageUrl,
-            onLike: handleFavorite,
-            isFavorite: favorites?.find((catId) => catId === id) !== undefined,
-          }))}
+          cats={cats.map(
+            ({ id, url: imageUrl }): CatCardProps => ({
+              id,
+              imageUrl,
+              onLike: handleLike,
+              isLiked: likes.find((catId) => catId === id) !== undefined,
+            })
+          )}
           noElementsElement={
             <p className={resStyles(isLoading)}>{"Нет котиков :("}</p>
           }

@@ -1,5 +1,5 @@
 import { catsApiConfig } from "@/shared/configs";
-import { catsApi } from "@/shared/libs/http";
+import { appApi, catsApi } from "@/shared/libs/http";
 import { Cat } from "./model";
 
 export type GetCatsParams = {
@@ -28,4 +28,22 @@ export const fetchCat = async (id: string): Promise<Cat | undefined> => {
   const res = await catsApi.get<Cat>(`/images/${id}/?size=full`);
 
   return res.data;
+};
+
+export const fetchLikes = async () => {
+  const res = await appApi.get<{ catId: string }[]>("/likes");
+
+  return res.data;
+};
+
+export const likeCat = async (catId: string) => {
+  const res = await appApi.post(`/likes`, {
+    catId,
+  });
+
+  return res.data;
+};
+
+export const dislikeCat = async (catId: string) => {
+  return await appApi.delete(`/likes/${catId}`);
 };

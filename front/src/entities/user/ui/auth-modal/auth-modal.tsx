@@ -11,7 +11,7 @@ export const AuthModal = () => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { setToken, setFavorites } = useContext(UserContext);
+  const { setToken, setLikes } = useContext(UserContext);
 
   const handleClose = () => setIsOpen(false);
 
@@ -28,7 +28,7 @@ export const AuthModal = () => {
     authUser({ login, password })
       .then((res) => {
         setToken(res.headers["x-auth-token"]);
-        setFavorites(res.data.likes);
+        setLikes(res.data.likes);
         setIsOpen(false);
       })
       .catch((err: AxiosError<any>) => {
