@@ -2,7 +2,11 @@ import { BaseComponent } from "@/shared/types";
 import clsx from "clsx";
 import { buttonStyles } from "./styles";
 
-export const Button: BaseComponent<{}, HTMLButtonElement> = ({
+export type ButtonProps = {
+  type?: "button" | "submit" | "reset";
+};
+
+export const Button: BaseComponent<ButtonProps, HTMLButtonElement> = ({
   children,
   className,
   ...props

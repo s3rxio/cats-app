@@ -69,7 +69,7 @@ export const AuthModal: BaseComponent<AuthModalProps> = ({
         >
           {error}
         </p>
-        <Button type="sumbit" className={authModalStyles.button}>
+        <Button type="submit" className={authModalStyles.button}>
           Авторизоваться
         </Button>
       </form>
