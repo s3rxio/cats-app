@@ -66,7 +66,8 @@
     }
   }
 
-  &:hover {
+  &:hover,
+  &:active {
     filter: drop-shadow(0 6px 4px rgba(0, 0, 0, 35%));
 
     .cat-card__like__icon:not(.cat-card__like__icon--active) {

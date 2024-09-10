@@ -1,3 +1,5 @@
+@use "~/styles/vars" as vars;
+
 .cats-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
@@ -10,7 +12,9 @@
     aspect-ratio: 1 / 1;
   }
 
-  &__item:hover {
-    transform: scale(1.15);
+  @media screen and (min-width: vars.$screen-mobile) {
+    &__item:hover {
+      transform: scale(1.15);
+    }
   }
 }

@@ -30,7 +30,7 @@ body,
   padding-right: var(--padding);
 
   @media (max-width: vars.$screen-desktop) {
-    --padding: 10px;
+    --padding: 24px;
 
     max-width: var(--screen-laptop);
   }
