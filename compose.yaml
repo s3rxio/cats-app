@@ -29,8 +29,8 @@ services:
           action: rebuild
     environment:
       NODE_ENV: prod
-      SECRET: s3cr3t # i know
-      SALT_ROUNDS: 10 # also i know 
+      SECRET: ${SECRET} # i know
+      SALT_ROUNDS: ${SALT_ROUNDS} # also i know 
       DB_HOST: cat-pinterest-api-pg
       DB_PORT: 5432
       DB_USER: postgres
@@ -47,7 +47,7 @@ services:
       context: ./front/
       args:
         NODE_ENV: prod
-        VITE_CATS_API_KEY: live_G4HQ01NdREtb4LPrki6Vmro06T5PlkbLfW2E1oDELKfELyLNWpluPu8WTtLyvdzS # i know...
+        VITE_CATS_API_KEY: ${CATS_API_KEY} # i know...
     networks:
       - cat-pinterest-net
     develop:
