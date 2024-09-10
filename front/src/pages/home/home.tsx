@@ -62,7 +62,7 @@ const HomePage: BaseComponent = () => {
   return (
     <Layout>
       <div className={clsx("container", homeStyles.root)}>
-        {!isError && (
+        {
           <CatsList
             cats={cats.map(
               ({ id, url: imageUrl }): CatCardProps => ({
@@ -71,10 +71,12 @@ const HomePage: BaseComponent = () => {
               })
             )}
             noElementsElement={
-              <p className={resStyles(isLoading)}>{"Нет котиков :("}</p>
+              <p className={resStyles(isLoading || isError)}>
+                {"Нет котиков :("}
+              </p>
             }
           />
-        )}
+        }
 
         <p className={resStyles(!isLoading || isError)}>
           ... загружаем еще котиков ...
