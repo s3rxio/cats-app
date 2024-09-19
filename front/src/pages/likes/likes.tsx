@@ -3,7 +3,6 @@ import { Layout } from "@/shared/ui";
 import { useEffect, useMemo, useState } from "react";
 import { likesStyles } from "./styles";
 import clsx from "clsx";
-import { CatCardProps } from "@/features/list-cats/ui/cat-card";
 import { useAuthModal, useLikes, useToken } from "@/entities/user";
 import { useQueries, UseQueryOptions } from "@tanstack/react-query";
 import { Cat, catApi } from "@/shared/api/cat";
