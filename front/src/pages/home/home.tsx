@@ -25,8 +25,6 @@ const HomePage: BaseComponent = () => {
     });
   };
 
-  useEffect(() => {}, [isFetching]);
-
   return (
     <Layout>
       <div className={clsx("container", homeStyles.root)}>

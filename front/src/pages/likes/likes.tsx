@@ -3,16 +3,19 @@ import { Layout } from "@/shared/ui";
 import { useEffect, useMemo, useState } from "react";
 import { likesStyles } from "./styles";
 import clsx from "clsx";
-import { useAuthModal, useLikes, useToken } from "@/entities/user";
+import { useAuthModal, useToken } from "@/entities/user";
 import { useQueries, UseQueryOptions } from "@tanstack/react-query";
 import { Cat, catApi } from "@/shared/api/cat";
 import { CAT_QUERY_KEY } from "@/entities/cat";
 import { AxiosResponse } from "axios";
+import { useLikesQuery } from "@/entities/user/queries";
 
 type CatQuery = UseQueryOptions<AxiosResponse<Cat>>;
 
 const LikesPage = () => {
-  const { likes } = useLikes();
+  const { data: likesData, error: likesError } = useLikesQuery({
+    refetchOnMount: "always",
+  });
   const { token } = useToken();
   const { openAuthModal } = useAuthModal();
   const [page, setPage] = useState(0);
@@ -39,30 +42,30 @@ const LikesPage = () => {
   });
 
   const maxPage = useMemo(
-    () => Math.ceil(likes.length / limit),
-    [likes, limit]
+    () => Math.ceil(likesData?.data.length || 0 / limit),
+    [likesData, limit]
   );
 
   useEffect(() => {
-    if (!token) {
+    if (!token || likesError) {
       openAuthModal();
       return;
     }
 
-    if (isFetching || isError || page >= maxPage) {
+    if (!likesData || isFetching || isError || page >= maxPage) {
       return;
     }
 
     const start = page * limit;
-    const newQueries = likes
+    const newQueries = likesData.data
       .slice(start, start + limit)
-      .map<CatQuery>((id) => ({
-        queryKey: [CAT_QUERY_KEY, id],
-        queryFn: () => catApi.fetchCatById(id),
+      .map<CatQuery>((like) => ({
+        queryKey: [CAT_QUERY_KEY, like],
+        queryFn: () => catApi.fetchCatById(like.catId),
       }));
 
     setQueries([...queries, ...newQueries]);
-  }, [likes, page, token]);
+  }, [likesData, page, token]);
 
   return (
     <Layout>
