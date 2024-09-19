@@ -2,7 +2,7 @@
 
 ## Статус работы
 
-- [x] Frontend(требуется рефакторинг)
+- [x] Frontend
 - [x] Backend
 
 Посмотреть сайт можно [здесь](https://cats-app.s3rxio.ru)
