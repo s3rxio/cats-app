@@ -1,87 +1,44 @@
 import { BaseComponent } from "@/shared/types";
-import { CatCardProps, CatsList, fetchCats } from "@/entities/cat";
 import { homeStyles } from "./styles";
 import clsx from "clsx";
-import { Cat } from "@/entities/cat";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Layout } from "@/shared/ui";
+import { useCatsQuery } from "@/entities/cat";
+import { Cat } from "@/shared/api/cat";
+import { CatsList } from "@/features/list-cats";
 
 const HomePage: BaseComponent = () => {
   const [cats, setCats] = useState<Cat[]>([]);
-  const [page, setPage] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-
-  const fetchAndAddCats = async () => {
-    try {
-      setIsLoading(true);
-
-      await fetchCats({
-        size: "med",
-        page,
-      }).then((cats) => {
-        setCats((prev) => [...prev, ...cats]);
-        setPage((prev) => prev + 1);
-      });
-
-      setIsLoading(false);
-    } catch {
-      setIsError(true);
-      setIsLoading(false);
-    }
-  };
-
-  const handleScroll = () => {
-    if (
-      window.scrollY + window.innerHeight >=
-      document.documentElement.scrollHeight - 48
-    ) {
-      setIsLoading(true);
-    }
-  };
-
-  useMemo(() => {
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const { data, fetchNextPage, isFetching, error } = useCatsQuery();
 
   useEffect(() => {
-    if (!isLoading) return;
+    const newCats = data?.pages[data.pages.length - 1] || [];
 
-    fetchAndAddCats();
-  }, [isLoading]);
+    setCats([...cats, ...newCats]);
+  }, [data]);
 
-  const resStyles = useCallback(
-    (state: boolean) => clsx(homeStyles.res, state && homeStyles.resHidden),
-    [isLoading, isError]
-  );
+  const handleRefetch = async function () {
+    if (isFetching) return;
+
+    await fetchNextPage({
+      cancelRefetch: false,
+    });
+  };
+
+  useEffect(() => {}, [isFetching]);
 
   return (
     <Layout>
       <div className={clsx("container", homeStyles.root)}>
-        {
-          <CatsList
-            cats={cats.map(
-              ({ id, url: imageUrl }): CatCardProps => ({
-                id,
-                imageUrl,
-              })
-            )}
-            noElementsElement={
-              <p className={resStyles(isLoading || isError)}>
-                {"Нет котиков :("}
-              </p>
-            }
-          />
-        }
-
-        <p className={resStyles(!isLoading || isError)}>
-          ... загружаем еще котиков ...
-        </p>
-        <p className={resStyles(!isError)}>Произошла ошибка :(</p>
+        <CatsList
+          cats={cats.map((cat) => ({
+            id: cat.id,
+            imageUrl: cat.url,
+          }))}
+          onReachEnd={handleRefetch}
+          isFetching={isFetching}
+          error={error?.message}
+        />
       </div>
     </Layout>
   );

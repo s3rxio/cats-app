@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": "/src",
-      "~": "/src/shared",
+      "@styles": "/src/shared/styles",
     },
   },
 });

@@ -2,8 +2,9 @@ import { BaseComponent } from "@/shared/types";
 import clsx from "clsx";
 import { headerStyles } from "./styles";
 import { NavLink, NavLinkRenderProps } from "react-router-dom";
+import { memo } from "react";
 
-export const Header: BaseComponent = ({ className, ...props }) => {
+export const Header: BaseComponent = memo(({ className, ...props }) => {
   const linkClassName = ({ isActive }: NavLinkRenderProps) =>
     clsx(headerStyles.link, isActive && headerStyles.linkActive);
 
@@ -19,4 +20,4 @@ export const Header: BaseComponent = ({ className, ...props }) => {
       </div>
     </header>
   );
-};
+});

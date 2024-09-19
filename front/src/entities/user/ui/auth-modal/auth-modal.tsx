@@ -1,11 +1,10 @@
 import { Modal, Button, Input } from "@/shared/ui";
-import { useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import { authModalStyles } from "./styles";
-import { UserContext } from "../../context";
 import clsx from "clsx";
-import { authUser } from "../../api";
-import { AxiosError } from "axios";
 import { BaseComponent } from "@/shared/types";
+import { useAuth } from "../../hooks";
+import { useAuthMutation } from "../../queries";
 
 export interface AuthModalProps {
   isOpen: boolean;
@@ -19,28 +18,40 @@ export const AuthModal: BaseComponent<AuthModalProps> = ({
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { setToken } = useContext(UserContext);
+  const { auth } = useAuth();
+  const { mutateAsync, reset } = useAuthMutation();
 
-  const handleClose = () => setIsOpen(false);
+  const handleClose = useCallback(() => setIsOpen(false), []);
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (ev) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (ev) => {
     ev.preventDefault();
 
     setError("");
+    reset();
 
     if (!login || !password) {
       setError("Заполните все поля");
       return;
     }
 
-    authUser({ login, password })
-      .then((res) => {
-        setToken(res.headers["x-auth-token"]);
-        setIsOpen(false);
-      })
-      .catch((err: AxiosError<any>) => {
-        setError(err.response?.data?.message || "Error while authorization");
-      });
+    await mutateAsync(
+      { login, password },
+      {
+        onSuccess: (data) => {
+          auth(data.headers["x-auth-token"]);
+
+          setIsOpen(false);
+        },
+        onError: (error) => {
+          if (Array.isArray(error.response?.data.message)) {
+            setError(error.response?.data.message[0] || "");
+            return;
+          }
+
+          setError(error.response?.data.message || "");
+        },
+      }
+    );
   };
 
   return (
@@ -54,12 +65,14 @@ export const AuthModal: BaseComponent<AuthModalProps> = ({
         <Input
           type="text"
           placeholder="Логин"
-          onChange={(ev) => setLogin(ev.currentTarget.value)}
+          value={login}
+          onChange={(ev) => setLogin(ev.target.value)}
         />
         <Input
           type="password"
           placeholder="Пароль"
-          onChange={(ev) => setPassword(ev.currentTarget.value)}
+          value={password}
+          onChange={(ev) => setPassword(ev.target.value)}
         />
         <p
           className={clsx(
@@ -67,7 +80,7 @@ export const AuthModal: BaseComponent<AuthModalProps> = ({
             error && authModalStyles.errorVisible
           )}
         >
-          {error}
+          {error || "Что-то пошло не так"}
         </p>
         <Button type="submit" className={authModalStyles.button}>
           Авторизоваться
