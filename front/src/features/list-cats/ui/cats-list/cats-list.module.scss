@@ -1,0 +1,47 @@
+@use "@styles/vars" as vars;
+
+.cats-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(216px, 1fr));
+
+  gap: 48px;
+
+  &__item {
+    transition: transform 0.1s;
+
+    aspect-ratio: 1 / 1;
+  }
+
+  &__full {
+    grid-column: 1 / -1;
+  }
+
+  &__no-cats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__request {
+    display: flex;
+
+    text-align: center;
+    justify-content: center;
+
+    visibility: hidden;
+
+    &--visible {
+      visibility: visible;
+    }
+
+    &__error {
+      color: var(--red);
+    }
+  }
+
+  @media screen and (min-width: vars.$screen-mobile) {
+    &__item:hover {
+      transform: scale(1.15);
+    }
+  }
+}

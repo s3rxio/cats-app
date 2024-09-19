@@ -1,20 +1,12 @@
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import { USER_TOKEN_KEY } from "./consts";
-import { fetchLikes } from "../cat";
+import { createContext, Dispatch, FC, SetStateAction } from "react";
 import { AuthModal } from "./ui";
 
-export interface UserContextValue<T = string | null, F = string[]> {
-  token: T;
-  setToken: Dispatch<SetStateAction<T>>;
+export interface UserContextValue {
+  token: string | null;
+  setToken: Dispatch<SetStateAction<string | null>>;
 
-  likes: F;
-  setLikes: Dispatch<SetStateAction<F>>;
+  likes: string[];
+  setLikes: Dispatch<SetStateAction<string[]>>;
 
   authModalIsOpen: boolean;
   setAuthModalIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -24,35 +16,18 @@ export const UserContext = createContext<UserContextValue>(
   {} as UserContextValue
 );
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [token, setToken] = useState<UserContextValue["token"]>(
-    localStorage.getItem(USER_TOKEN_KEY)
-  );
-  const [likes, setLikes] = useState<UserContextValue["likes"]>([]);
-  const [authModalIsOpen, setAuthModalIsOpen] = useState(false);
+export interface UserProviderProps {
+  children: React.ReactNode;
+  value: UserContextValue;
+}
 
-  useEffect(() => {
-    if (!token) {
-      setLikes([]);
-      return;
-    }
-
-    localStorage.setItem(USER_TOKEN_KEY, token);
-    fetchLikes().then((cats) => setLikes(cats.map(({ catId }) => catId)));
-  }, [token]);
-
+export const UserProvider: FC<UserProviderProps> = ({ children, value }) => {
   return (
-    <UserContext.Provider
-      value={{
-        token,
-        setToken,
-        likes,
-        setLikes,
-        authModalIsOpen,
-        setAuthModalIsOpen,
-      }}
-    >
-      <AuthModal isOpen={authModalIsOpen} setIsOpen={setAuthModalIsOpen} />
+    <UserContext.Provider value={value}>
+      <AuthModal
+        isOpen={value.authModalIsOpen}
+        setIsOpen={value.setAuthModalIsOpen}
+      />
 
       {children}
     </UserContext.Provider>
