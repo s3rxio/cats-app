@@ -1,4 +1,4 @@
-import { BaseComponent } from "@/shared/types";
+import { BaseComponent } from "@/shared/ui/types";
 import { modalStyles } from "./styles";
 import { clsx } from "clsx";
 import { Portal } from "../portal";

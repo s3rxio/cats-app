@@ -3,12 +3,11 @@ import { Layout } from "@/shared/ui";
 import { useEffect, useMemo, useState } from "react";
 import { likesStyles } from "./styles";
 import clsx from "clsx";
-import { useAuthModal, useToken } from "@/entities/user";
+import { useAuthModal, useToken, useLikesQuery } from "@/entities/user";
 import { useQueries, UseQueryOptions } from "@tanstack/react-query";
-import { Cat, catApi } from "@/shared/api/cat";
+import { Cat, catApi } from "@/shared/api";
 import { CAT_QUERY_KEY } from "@/entities/cat";
 import { AxiosResponse } from "axios";
-import { useLikesQuery } from "@/entities/user/queries";
 
 type CatQuery = UseQueryOptions<AxiosResponse<Cat>>;
 

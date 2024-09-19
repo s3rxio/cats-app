@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { UserContext } from "./context";
-import { USER_TOKEN_KEY } from "@/shared/consts";
+import { USER_TOKEN_KEY } from "@/shared/configs";
 
 export const useAuthModal = () => {
   const { authModalIsOpen, setAuthModalIsOpen } = useContext(UserContext);

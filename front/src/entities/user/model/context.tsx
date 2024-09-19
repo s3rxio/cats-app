@@ -1,5 +1,5 @@
 import { createContext, Dispatch, FC, SetStateAction } from "react";
-import { AuthModal } from "./ui";
+import { AuthModal } from "../ui";
 
 export interface UserContextValue {
   token: string | null;

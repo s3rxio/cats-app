@@ -4,7 +4,7 @@ import {
   AuthUserDto,
   Like,
   User,
-} from "@/shared/api/app";
+} from "@/shared/api";
 import {
   useMutation,
   UseMutationOptions,

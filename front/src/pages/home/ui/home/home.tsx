@@ -1,10 +1,9 @@
-import { BaseComponent } from "@/shared/types";
 import { homeStyles } from "./styles";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import { Layout } from "@/shared/ui";
+import { BaseComponent, Layout } from "@/shared/ui";
 import { useCatsQuery } from "@/entities/cat";
-import { Cat } from "@/shared/api/cat";
+import { Cat } from "@/shared/api";
 import { CatsList } from "@/features/list-cats";
 
 const HomePage: BaseComponent = () => {

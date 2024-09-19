@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { HomePage } from "@/pages/home";
-import { LikesPage } from "./likes";
+import { LikesPage } from "../pages/likes";
 
 // TODO: Add lazy routes
 

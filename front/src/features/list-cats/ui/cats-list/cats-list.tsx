@@ -1,4 +1,4 @@
-import { BaseComponent } from "@/shared/types";
+import { BaseComponent } from "@/shared/ui";
 import { catsListStyles } from "./styles";
 import clsx from "clsx";
 import { useEffect } from "react";

@@ -1,1 +1,1 @@
-export { default as LikesPage } from "./likes";
+export { default as LikesPage } from "./ui/likes/likes";

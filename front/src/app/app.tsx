@@ -1,11 +1,10 @@
 import { RouterProvider } from "react-router-dom";
-import { router } from "../pages";
+import { router } from "./router";
 import { UserContextValue, UserProvider } from "@/entities/user";
-import { USER_TOKEN_KEY } from "@/shared/consts";
+import { USER_TOKEN_KEY } from "@/shared/configs";
 import { useState, useEffect } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "@/shared/api";
-import { appApi } from "@/shared/api/app";
+import { appApi, queryClient } from "@/shared/api";
 import { AxiosError } from "axios";
 
 export const App = () => {

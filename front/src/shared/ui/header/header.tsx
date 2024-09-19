@@ -1,4 +1,4 @@
-import { BaseComponent } from "@/shared/types";
+import { BaseComponent } from "@/shared/ui/types";
 import clsx from "clsx";
 import { headerStyles } from "./styles";
 import { NavLink, NavLinkRenderProps } from "react-router-dom";

@@ -1,10 +1,9 @@
-import { Modal, Button, Input } from "@/shared/ui";
+import { BaseComponent, Modal, Button, Input } from "@/shared/ui";
 import { useCallback, useState } from "react";
 import { authModalStyles } from "./styles";
 import clsx from "clsx";
-import { BaseComponent } from "@/shared/types";
-import { useAuth } from "../../hooks";
-import { useAuthMutation } from "../../queries";
+import { useAuth } from "../../model/hooks";
+import { useAuthMutation } from "../../api/queries";
 
 export interface AuthModalProps {
   isOpen: boolean;

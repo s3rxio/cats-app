@@ -1,7 +1,12 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { Cat, catApi, GetCatParams, GetCatsParams } from "@/shared/api/cat";
+import {
+  Cat,
+  catApi,
+  GetCatParams,
+  GetCatsParams,
+  AppApiAxiosError,
+} from "@/shared/api";
 import { AxiosResponse } from "axios";
-import { AppApiAxiosError } from "@/shared/api/app";
 
 export const CAT_QUERY_KEY = "cat";
 

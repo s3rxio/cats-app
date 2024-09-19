@@ -1,4 +1,4 @@
-import { BaseComponent } from "@/shared/types";
+import { BaseComponent } from "@/shared/ui/types";
 
 export const HeartFilledIcon: BaseComponent<React.SVGProps<SVGSVGElement>> = (
   props

@@ -1,13 +1,13 @@
-import { BaseComponent } from "@/shared/types";
 import clsx from "clsx";
 import { catCardStyles } from "./styles";
-import { HeartFilledIcon, HeartIcon } from "@/shared/ui/icons";
+import { HeartFilledIcon, HeartIcon, BaseComponent } from "@/shared/ui";
 import { memo, useState } from "react";
-import { useAuthModal, useToken } from "@/entities/user";
 import {
+  useAuthModal,
+  useToken,
   useAddLikeMutation,
   useRemoveLikeMutation,
-} from "@/entities/user/queries";
+} from "@/entities/user";
 
 export type OnLikeHandler<T = void> = (
   id: string,
