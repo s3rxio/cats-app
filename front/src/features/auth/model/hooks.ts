@@ -1,4 +1,4 @@
-import { TOKEN_KEY } from "@/shared/configs";
+import { TOKEN_KEY } from "@/shared/storage";
 import { useContext } from "react";
 import { AuthContext } from "./context";
 

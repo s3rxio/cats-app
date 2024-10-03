@@ -1,4 +1,4 @@
-import { catsApiConfig } from "@/shared/configs";
+import { catsApiConfig } from "./config";
 import { catsApiInstance } from "./instance";
 import { Cat, GetCatParams, GetCatsParams } from "./types";
 

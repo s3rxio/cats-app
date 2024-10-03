@@ -1,6 +1,6 @@
 import axios from "axios";
-import { appApiConfig } from "@/shared/configs";
-import { TOKEN_KEY } from "@/shared/configs";
+import { TOKEN_KEY } from "@/shared/storage";
+import { appApiConfig } from "./config";
 
 export const appApiInstance = axios.create({
   baseURL: appApiConfig.url,
