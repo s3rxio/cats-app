@@ -8,4 +8,4 @@ export const appApiConfig = {
   url: import.meta.env.VITE_APP_API_URL || `${window.location.origin}/api`,
 };
 
-export const USER_TOKEN_KEY = "token";
+export const TOKEN_KEY = "token";

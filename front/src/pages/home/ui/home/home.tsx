@@ -1,14 +1,17 @@
 import { homeStyles } from "./styles";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import { BaseComponent, Layout } from "@/shared/ui";
-import { useCatsQuery } from "@/entities/cat";
-import { Cat } from "@/shared/api";
-import { CatsList } from "@/features/list-cats";
+import { BaseComponent } from "@/shared/ui";
+import { appQueries, Cat, catQueries } from "@/shared/api";
+import { CatsList } from "@/widgets/cats-list";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 const HomePage: BaseComponent = () => {
   const [cats, setCats] = useState<Cat[]>([]);
-  const { data, fetchNextPage, isFetching, error } = useCatsQuery();
+  const { data, fetchNextPage, isFetching, error } = useInfiniteQuery(
+    catQueries.getCatsQuery()
+  );
+  const likes = useQuery(appQueries.likesQueries.getLikesQuery());
 
   useEffect(() => {
     const newCats = data?.pages[data.pages.length - 1] || [];
@@ -25,19 +28,18 @@ const HomePage: BaseComponent = () => {
   };
 
   return (
-    <Layout>
-      <div className={clsx("container", homeStyles.root)}>
-        <CatsList
-          cats={cats.map((cat) => ({
-            id: cat.id,
-            imageUrl: cat.url,
-          }))}
-          onReachEnd={handleRefetch}
-          isFetching={isFetching}
-          error={error?.message}
-        />
-      </div>
-    </Layout>
+    <div className={clsx("container", homeStyles.root)}>
+      <CatsList
+        cats={cats.map((cat) => ({
+          id: cat.id,
+          imageUrl: cat.url,
+          isLiked: !!likes.data?.data.find((like) => like.catId === cat.id),
+        }))}
+        onReachEnd={handleRefetch}
+        isFetching={isFetching}
+        error={error?.message}
+      />
+    </div>
   );
 };
 

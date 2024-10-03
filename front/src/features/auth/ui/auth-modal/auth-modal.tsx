@@ -1,9 +1,9 @@
-import { BaseComponent, Modal, Button, Input } from "@/shared/ui";
+import { BaseComponent, Modal, Input, Button } from "@/shared/ui";
 import { useCallback, useState } from "react";
 import { authModalStyles } from "./styles";
 import clsx from "clsx";
-import { useAuth } from "../../model/hooks";
 import { useAuthMutation } from "../../api/queries";
+import { useAuth } from "../../model/hooks";
 
 export interface AuthModalProps {
   isOpen: boolean;
@@ -17,10 +17,12 @@ export const AuthModal: BaseComponent<AuthModalProps> = ({
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { auth } = useAuth();
   const { mutateAsync, reset } = useAuthMutation();
+  const { auth } = useAuth();
 
-  const handleClose = useCallback(() => setIsOpen(false), []);
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
+  }, []);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (ev) => {
     ev.preventDefault();
@@ -37,9 +39,12 @@ export const AuthModal: BaseComponent<AuthModalProps> = ({
       { login, password },
       {
         onSuccess: (data) => {
-          auth(data.headers["x-auth-token"]);
-
-          setIsOpen(false);
+          try {
+            auth(data.headers["x-auth-token"]);
+            setIsOpen(false);
+          } catch (error) {
+            setError("Ошибка авторизации");
+          }
         },
         onError: (error) => {
           if (Array.isArray(error.response?.data.message)) {

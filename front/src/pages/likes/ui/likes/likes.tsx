@@ -1,22 +1,17 @@
-import { CatsList } from "@/features/list-cats";
-import { Layout } from "@/shared/ui";
 import { useEffect, useMemo, useState } from "react";
 import { likesStyles } from "./styles";
 import clsx from "clsx";
-import { useAuthModal, useToken, useLikesQuery } from "@/entities/user";
-import { useQueries, UseQueryOptions } from "@tanstack/react-query";
-import { Cat, catApi } from "@/shared/api";
-import { CAT_QUERY_KEY } from "@/entities/cat";
-import { AxiosResponse } from "axios";
+import { useQueries, useQuery } from "@tanstack/react-query";
+import { appQueries, catQueries } from "@/shared/api";
+import { CatsList } from "@/widgets/cats-list";
 
-type CatQuery = UseQueryOptions<AxiosResponse<Cat>>;
+type CatQuery = ReturnType<typeof catQueries.getCatQuery>;
 
 const LikesPage = () => {
-  const { data: likesData, error: likesError } = useLikesQuery({
+  const { data: likesData } = useQuery({
+    ...appQueries.likesQueries.getLikesQuery(),
     refetchOnMount: "always",
   });
-  const { token } = useToken();
-  const { openAuthModal } = useAuthModal();
   const [page, setPage] = useState(0);
   const [limit] = useState(15);
   const [queries, setQueries] = useState<CatQuery[]>([]);
@@ -30,6 +25,7 @@ const LikesPage = () => {
       const cats = data.map((cat) => ({
         id: cat.id,
         imageUrl: cat.url,
+        isLiked: true,
       }));
 
       return {
@@ -46,37 +42,27 @@ const LikesPage = () => {
   );
 
   useEffect(() => {
-    if (!token || likesError) {
-      openAuthModal();
-      return;
-    }
-
     if (!likesData || isFetching || isError || page >= maxPage) {
       return;
     }
 
     const start = page * limit;
-    const newQueries = likesData.data
+    const newQueries: CatQuery[] = likesData.data
       .slice(start, start + limit)
-      .map<CatQuery>((like) => ({
-        queryKey: [CAT_QUERY_KEY, like],
-        queryFn: () => catApi.fetchCatById(like.catId),
-      }));
+      .map((like) => catQueries.getCatQuery(like.catId));
 
     setQueries([...queries, ...newQueries]);
-  }, [likesData, page, token]);
+  }, [likesData, page]);
 
   return (
-    <Layout>
-      <div className={clsx("container", likesStyles.root)}>
-        <CatsList
-          cats={data}
-          isFetching={isFetching}
-          error={isError ? "Ошибка при загрузке котиков" : undefined}
-          onReachEnd={() => setPage(page + 1)}
-        />
-      </div>
-    </Layout>
+    <div className={clsx("container", likesStyles.root)}>
+      <CatsList
+        cats={data}
+        isFetching={isFetching}
+        error={isError ? "Ошибка при загрузке котиков" : undefined}
+        onReachEnd={() => setPage(page + 1)}
+      />
+    </div>
   );
 };
 

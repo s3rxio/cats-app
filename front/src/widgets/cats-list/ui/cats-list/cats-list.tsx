@@ -3,7 +3,6 @@ import { catsListStyles } from "./styles";
 import clsx from "clsx";
 import { useEffect } from "react";
 import { CatCard, CatCardProps } from "../cat-card";
-import { useLikes } from "@/entities/user";
 
 export interface CatsListProps {
   cats?: CatCardProps[];
@@ -21,8 +20,6 @@ export const CatsList: BaseComponent<CatsListProps> = ({
   error,
   ...props
 }) => {
-  const { likes } = useLikes();
-
   const handleScroll = () => {
     const threshold = 5;
     const scrolledTo = window.innerHeight + window.scrollY;
@@ -55,7 +52,7 @@ export const CatsList: BaseComponent<CatsListProps> = ({
             key={index}
             {...cat}
             className={catsListStyles.item}
-            isLiked={cat.isLiked || likes.includes(cat.id)}
+            isLiked={cat.isLiked}
           />
         ))
       )}

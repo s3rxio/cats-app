@@ -2,12 +2,8 @@ import clsx from "clsx";
 import { catCardStyles } from "./styles";
 import { HeartFilledIcon, HeartIcon, BaseComponent } from "@/shared/ui";
 import { memo, useState } from "react";
-import {
-  useAuthModal,
-  useToken,
-  useAddLikeMutation,
-  useRemoveLikeMutation,
-} from "@/entities/user";
+import { appQueries } from "@/shared/api";
+import { useAuth } from "@/features/auth";
 
 export type OnLikeHandler<T = void> = (
   id: string,
@@ -32,12 +28,13 @@ export const CatCard: BaseComponent<CatCardProps> = memo(
     isLiked: isLikedProp,
     ...props
   }) => {
-    const { token } = useToken();
-    const { openAuthModal } = useAuthModal();
+    const { token, startAuth } = useAuth();
     const [isDisabled, setIsDisabled] = useState(false);
     const [isLiked, setIsLiked] = useState(isLikedProp || false);
-    const { mutateAsync: addLike } = useAddLikeMutation();
-    const { mutateAsync: removeLike } = useRemoveLikeMutation();
+    const { mutateAsync: addLike } =
+      appQueries.likesQueries.useAddLikeMutation();
+    const { mutateAsync: removeLike } =
+      appQueries.likesQueries.useRemoveLikeMutation();
 
     const handleLike: React.ChangeEventHandler<HTMLInputElement> = async (
       ev
@@ -45,7 +42,7 @@ export const CatCard: BaseComponent<CatCardProps> = memo(
       ev.stopPropagation();
 
       if (!token) {
-        openAuthModal();
+        startAuth();
         return;
       }
 
@@ -59,8 +56,12 @@ export const CatCard: BaseComponent<CatCardProps> = memo(
           await addLike(id);
           setIsLiked(true);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
+        if (error?.response?.status === 401) {
+          startAuth();
+          return;
+        }
       }
 
       setIsDisabled(false);
